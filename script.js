@@ -1,4 +1,4 @@
-
+const message = document.querySelector(".message");
 
 function Gameboard (){
     const rows = 3;
@@ -17,9 +17,11 @@ function Gameboard (){
     const selectCell = (row, column, playerSymbol) => {
         if (board[row][column].getValue() === "-"){
             board[row][column].addSymbol(playerSymbol)
+            return true;
         } else{
-            console.log("Already chosen");
-            return;
+            message.textContent=""
+            message.textContent= "Already chosen";
+            return false;
         }
     }
 
@@ -78,7 +80,9 @@ function Game(){
     
 
     const playRound = (row, column,) =>{
-        board.selectCell(row,column, players.getActivePlayer().symbol);
+        const moveSuccessful = board.selectCell(row, column, players.getActivePlayer().symbol);
+        if (!moveSuccessful) return; 
+
         winRound();
         players.switchPlayerTurn();
         board.printBoard();
@@ -89,14 +93,13 @@ function Game(){
          const myBoard = board.printBoard();
          const myPlayer = players.getActivePlayer();
          console.log(myBoard); 
-         const winMessage = document.querySelector(".winMessage");
-         winMessage.textContent = ""
+         message.textContent = ""
 
          //check for horizontal win
          for (let i = 0; i < myBoard.length; i++){
             for (let j = 0; j < myBoard[i].length; j++){
                 if(myPlayer.symbol === myBoard[i][j] && myBoard[i][j] === myBoard[i][j+1] && myBoard[i][j+1] === myBoard[i][j+2]){
-                    winMessage.textContent = `${myPlayer.name} wins!!!...` 
+                    message.textContent = `${myPlayer.name} wins!!!...` 
                 } 
             }
         }
@@ -104,7 +107,7 @@ function Game(){
         for (let i = 0; i < myBoard.length-2; i++){
             for (let j = 0; j < myBoard[i].length; j++){
                 if(myPlayer.symbol === myBoard[i][j] && myBoard[i][j] == myBoard[i+1][j] && myBoard[i+1][j] == myBoard[i+2][j]){
-                    winMessage.textContent = `${myPlayer.name} wins!!!...` 
+                    message.textContent = `${myPlayer.name} wins!!!...` 
                 }
             }
         }
@@ -112,7 +115,7 @@ function Game(){
         //check for diagonal win
         if(myPlayer.symbol === myBoard[0][0] && myBoard[0][0] == myBoard[1][1] && myBoard[1][1] == myBoard[2][2]||
             myPlayer.symbol === myBoard[0][2] && myBoard[0][2] == myBoard[1][1] && myBoard[1][1] == myBoard[2][0]){
-                winMessage.textContent = `${myPlayer.name} wins!!!...` 
+                message.textContent = `${myPlayer.name} wins!!!...` 
         }
             
     }
